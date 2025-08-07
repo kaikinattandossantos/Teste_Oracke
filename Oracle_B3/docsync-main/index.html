@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocSync AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <span>DocSync AI</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-target="input-screen"><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                <li class="menu-item" data-target="readme-screen"><a href="#"><i class="fas fa-file-alt"></i> AutoDoc.md</a></li>
+                <li class="menu-item" data-target="bugs-screen"><a href="#"><i class="fas fa-bug"></i> Análise de Bugs</a></li>
+                <li class="menu-item" data-target="complexity-screen"><a href="#"><i class="fas fa-calculator"></i> Análise de Complexidade</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <section id="input-screen" class="screen">
+                <div class="card">
+                    <h1>Documentação Inteligente a partir dos seus Commits</h1>
+                    <p>A DocSync AI analisa o histórico de commits do seu repositório para entender a evolução do projeto e gerar um README que reflete verdadeiramente suas funcionalidades.</p>
+                    <div class="input-group">
+                        <i class="fab fa-github"></i>
+                        <input type="text" id="repo-url" placeholder="Cole a URL do seu repositório GitHub aqui">
+                    </div>
+                    <div class="consent-group">
+                        <input type="checkbox" id="consent-checkbox">
+                        <label for="consent-checkbox">Eu entendo que o código e os commits do meu repositório serão analisados apenas para fins de leitura e não serão armazenados.</label>
+                    </div>
+                    <button id="analyze-btn" disabled>
+                        <span class="btn-text">Analisar Commits e Gerar README</span>
+                        <div class="spinner hidden"></div>
+                    </button>
+                </div>
+            </section>
+
+            <section id="readme-screen" class="screen hidden">
+                 <header class="results-header">
+                    <h2>README.md para: <span class="repo-name"></span></h2>
+                    <div class="main-actions">
+                        <button id="copy-readme-btn" class="btn-secondary"><i class="fas fa-copy"></i> Copiar</button>
+                        <button id="pr-readme-btn" class="btn-secondary"><i class="fas fa-code-pull-request"></i> Criar Pull Request</button>
+                        <button id="commit-readme-btn"><i class="fas fa-check"></i> Commitar README.md</button>
+                    </div>
+                </header>
+                <div id="readme-content-container" class="readme-render-area">
+                </div>
+            </section>
+
+            <section id="bugs-screen" class="screen hidden">
+                 <header class="results-header">
+                    <h2>Análise de Bugs: <span class="repo-name"></span></h2>
+                    <div class="main-actions">
+                        <button id="generate-branch-btn"><i class="fas fa-code-merge"></i> Gerar Branch com Correções</button>
+                    </div>
+                </header>
+                <div id="bug-list-container" class="bug-list-container">
+                </div>
+            </section>
+
+            <section id="complexity-screen" class="screen hidden">
+                <header class="results-header">
+                    <h2>Análise de Complexidade Algorítmica com IA</h2>
+                </header>
+                <p class="section-description">Cole seu código abaixo e descubra sua complexidade computacional estimada, além de dicas de otimização baseadas em análise de IA.</p>
+                <div class="complexity-analyzer">
+                    <div class="code-editor-container">
+                        <div class="editor-header">
+                            <select id="language-selector">
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                            </select>
+                        </div>
+                        <textarea id="code-input" placeholder="Cole seu código aqui..."></textarea>
+                        <button id="analyze-complexity-btn">
+                            <span class="btn-text">Analisar Complexidade</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </div>
+                    <div id="complexity-results-container" class="complexity-results hidden">
+                        <h3>Resultado da Análise</h3>
+                        <div id="complexity-overall" class="complexity-badge"></div>
+                        <div class="result-section">
+                            <h4><i class="fas fa-search"></i> Gargalos Detectados</h4>
+                            <ul id="complexity-bottlenecks"></ul>
+                        </div>
+                        <div class="result-section">
+                            <h4><i class="fas fa-lightbulb"></i> Sugestões de Otimização</h4>
+                            <ul id="complexity-suggestions"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="modal-overlay" class="hidden"></div>
+    <div id="modal-container" class="hidden">
+        <div class="modal-header">
+            <div class="modal-title">
+                <h3>Visualização de Alterações</h3>
+                <span id="modal-filepath"></span>
+            </div>
+            <button id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-content">
+            <div class="diff-view">
+                <div class="code-pane">
+                    <h4>Antes</h4>
+                    <pre id="modal-code-before"></pre>
+                </div>
+                <div class="code-pane">
+                    <h4>Depois</h4>
+                    <pre id="modal-code-after"></pre>
+                </div>
+            </div>
+            <div id="modal-details" class="modal-details">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

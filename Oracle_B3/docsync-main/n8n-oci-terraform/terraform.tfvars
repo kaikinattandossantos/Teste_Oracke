@@ -1,0 +1,7 @@
+tenancy_ocid         = "ocid1.tenancy.oc1..aaaaaaaa2zjbbbx5w7vd76z662sl76aww4t6lecjmib6ssop54ckzjd27lyq"
+user_ocid            = "ocid1.user.oc1..aaaaaaaawzyhez3gbpbfya3e5nvbdrvnje3pegqxt237extrmd6zd4vlausq"
+fingerprint          = "4d:46:f2:21:b4:8a:03:81:3c:09:06:ec:75:a5:cb:09"
+private_key_path     = "n8n-oci-terraform\acess_key_oci\alexoci2025@gmail.com-2025-08-06T17_52_13.212Z.pem"
+ssh_public_key_path  = "n8n-oci-terraform\acess_key_oci\alexoci2025@gmail.com-2025-08-06T17_52_28.269Z_public.pem"
+region               = "us-chicago-1"
+compartment_id       = "ocid1.compartment.oc1..aaaaaaaaeh6qqb4ynqew7xlgs6cvvtmpmpxlegvxlyrdvlirhmxjv76334bq"
